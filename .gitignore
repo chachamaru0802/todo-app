@@ -24,11 +24,12 @@ hs_err_pid*
 
 *.class
 .gradle
-/build/
-/bin/
-/.settings/
+build/
+bin/
+.settings/
 .project
 .classpath
+.vscode
 
 # Package Files
 *.jar
