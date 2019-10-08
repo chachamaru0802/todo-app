@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import lombok.val;
 
+
 public class GetTodolHandler extends HandlerBase<Map<String, Object>, ApiGatewayResponse> {
 
     private Logger _logger = Logger.getLogger(GetTodolHandler.class);
