@@ -53,14 +53,14 @@ provider:
 
 # you can add packaging information here
 package:
-  artifact: build/distributions/hello.zip
+  artifact: build/distributions/todo.zip
 
 functions:
-  hello:
-    handler: com.serverless.TodoDetailHandler
+  GetTodo:
+    handler: com.serverless.GetTodolHandler
     events:
      - http:
-         path: users/create
+         path: api/todos/{id}
          method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
