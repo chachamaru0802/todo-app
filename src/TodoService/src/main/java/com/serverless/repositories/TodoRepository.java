@@ -30,11 +30,4 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     public TodoItem getTodoItem(String id) {
        return _mapper.load(TodoItem.class, id);
     }
-
-        result.setTitle(id);
-        result.setContents("Contents");
-
-        return result;
-    }
-
 }
