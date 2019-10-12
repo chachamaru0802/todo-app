@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import lombok.val;
 
-public class TodolHandler  {
+public class TodoHandler  {
 
   //  private Logger _logger = Logger.getLogger(GetTodolHandler.class);
 
