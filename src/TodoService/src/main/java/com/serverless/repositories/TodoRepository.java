@@ -1,13 +1,25 @@
 package com.serverless.repositories;
 
+import javax.inject.Inject;
+
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDB;
 import com.serverless.models.TodoItem;
+import com.serverless.utilities.IAwsUtility;
 
 import lombok.val;
 
 /**
  * Todoリポジトリ
  */
-public class TodoRepository implements ITodoRepository {
+public class TodoRepository extends RepositoryBase implements ITodoRepository {
+
+    private AmazonDynamoDB _dynamoDbClient;
+
+    // @Inject
+    public TodoRepository() {
+        // _dynamoDbClient = awsUtility.getDynamoDBClient();
+    }
 
     /**
      * Todo 取得
@@ -18,7 +30,7 @@ public class TodoRepository implements ITodoRepository {
     public TodoItem getTodoItem(String id) {
         val result = new TodoItem();
 
-        result.setTitle("title");
+        result.setTitle(id);
         result.setContents("Contents");
 
         return result;
