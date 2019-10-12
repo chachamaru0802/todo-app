@@ -39,3 +39,6 @@ bin/
 # Serverless directories
 .serverless
 
+/.metadata/
+
+.DS_Store
