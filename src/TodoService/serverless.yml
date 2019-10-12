@@ -57,7 +57,7 @@ package:
 
 functions:
   GetTodo:
-    handler: com.serverless.GetTodolHandler
+    handler: com.serverless.TodolHandler::getTodoItem
     events:
      - http:
          path: api/todos/{id}
