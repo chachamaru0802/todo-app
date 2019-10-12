@@ -37,6 +37,7 @@ compileTestJava.options.encoding = 'UTF-8'
 dependencies {
     // This dependency is used by the application.
     compile (
+        'com.amazonaws:aws-java-sdk-dynamodb:latest.release',
         'com.amazonaws:aws-lambda-java-core:1.1.0',
         'com.amazonaws:aws-lambda-java-log4j:1.0.0',
         'com.fasterxml.jackson.core:jackson-core:2.9.10',
