@@ -6,8 +6,6 @@ import com.serverless.repositories.ITodoRepository;
 import com.serverless.repositories.TodoRepository;
 import com.serverless.services.ITodoService;
 import com.serverless.services.TodoService;
-import com.serverless.utilities.AwsUtility;
-import com.serverless.utilities.IAwsUtility;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,10 +26,4 @@ public class AppModule {
     public ITodoRepository provideTodoRepository() {
         return new TodoRepository();
     }
-
-    // @Provides
-    // @Singleton
-    // public IAwsUtility provideAwsUtility(){
-    // return new AwsUtility();
-    // }
 }
