@@ -9,7 +9,6 @@ import com.serverless.repositories.TodoRepository;
 import com.serverless.services.ITodoService;
 import com.serverless.services.TodoService;
 
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,6 +21,12 @@ public class AppModule {
     @Singleton
     public ITodoService provideTodoService(ITodoRepository todoRepository) {
         return new TodoService(todoRepository);
+    }
+
+    @Provides
+    @Singleton
+    public ITodoRepository provideTodoRepository(AmazonDynamoDB dynamoDB) {
+        return new TodoRepository(dynamoDB);
     }
 
     @Provides
