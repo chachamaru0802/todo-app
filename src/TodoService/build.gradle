@@ -43,13 +43,16 @@ dependencies {
         'com.fasterxml.jackson.core:jackson-core:2.9.10',
         'com.fasterxml.jackson.core:jackson-databind:2.9.10',
         'com.fasterxml.jackson.core:jackson-annotations:2.9.10'
-        
     )
+
+    annotationProcessor('com.amazonaws:aws-java-sdk-dynamodb:latest.release')
+    testAnnotationProcessor('com.amazonaws:aws-java-sdk-dynamodb:latest.release')
 
     // lombok
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
     // dagger 
     compile "com.google.dagger:dagger:$dagger_version"
