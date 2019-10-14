@@ -66,4 +66,10 @@ public class TodoItem {
         calendar.setTime(date);
         time = calendar.getTimeInMillis();
     }
+
+    /**
+     * 完了フラグ
+     */
+     private boolean isCompleted;
+
 }
