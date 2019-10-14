@@ -30,4 +30,17 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     public TodoItem getTodoItem(String id) {
        return _mapper.load(TodoItem.class, id);
     }
+
+    /**
+     * Todo 保存
+     * 
+     * @param todoItem
+     * @return
+     */
+    public boolean setTodoItem(TodoItem todoItem) {
+        _mapper.save(todoItem);
+
+        return true;
+    }
+
 }
