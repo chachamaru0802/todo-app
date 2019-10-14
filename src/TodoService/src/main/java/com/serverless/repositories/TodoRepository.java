@@ -1,5 +1,6 @@
 package com.serverless.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
      */
     public List<TodoItem> searchTodoItem(TodoItem todoItem) {
         val scan = new DynamoDBScanExpression();
+        
         val todos = _mapper.scan(TodoItem.class, scan);
 
         return todos;
@@ -53,6 +55,15 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
      * @return
      */
     public boolean setTodoItem(TodoItem todoItem) {
+        val datetime = LocalDateTime.now();
+        val isEmptyId = todoItem.getId().isEmpty();
+
+        if(isEmptyId){
+            todoItem.setCreateDatetime(datetime);
+        }
+
+        todoItem.setUpdateDatetime(datetime);
+
         _mapper.save(todoItem);
 
         return true;
