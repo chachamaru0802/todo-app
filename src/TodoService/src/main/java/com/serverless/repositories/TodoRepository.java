@@ -43,4 +43,15 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
         return true;
     }
 
+    /**
+     * Todo 削除
+     * 
+     * @param todoItem
+     * @return
+     */
+    public boolean deleteTodoItem(TodoItem todoItem) {
+        _mapper.delete(todoItem);
+
+        return true;
+    }
 }
