@@ -9,7 +9,9 @@ import java.util.Date;
 
 import lombok.val;
 
-
+/**
+ * 日付ユーティリティ
+ */
 public final class DateUtils {
     
 
