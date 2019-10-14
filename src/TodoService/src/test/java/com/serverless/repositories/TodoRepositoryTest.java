@@ -32,11 +32,13 @@ public class TodoRepositoryTest {
 
     private final static String TEST_ID = "c179f5aa-57a0-4cda-b3bc-75e76ea39264";
 
+    private final static String TEST_UPDATE_ID = "c179f5aa-57a0-4cda-b3bc-111111111111";
+
     private final static String TEST_TITLE = "テストタイトル";
 
     private final static String TEST_CONTENTS = "テスト内容";
 
-    private final static LocalDate TEST_DATE = LocalDate.of(2019, 9, 30);
+    private final static LocalDate TEST_EXPIRED_DATE = LocalDate.of(2019, 9, 30);
 
     private final static boolean TEST_COMPLETED = false;
 
@@ -105,12 +107,13 @@ public class TodoRepositoryTest {
         
         _todos = new ArrayList<TodoItem>();
 
-        val testData =new TodoItem(){
+        // データ取得用 テストデータ作成
+        val testData = new TodoItem(){
             {
                 setId(TEST_ID);
                 setTitle(TEST_TITLE);
                 setContents(TEST_CONTENTS);
-                setExpiredDate(TEST_DATE);
+                setExpiredDate(TEST_EXPIRED_DATE);
                 setCompleted(TEST_COMPLETED);
                 setCreateDatetime(TEST_CREATE_DATETIME);
                 setUpdateDatetime(TEST_UPDATE_DATETIME);
@@ -120,12 +123,27 @@ public class TodoRepositoryTest {
         _mapper.save(testData);
         _todos.add(testData);
 
+        val updateData = new TodoItem(){
+            {
+                setId(TEST_UPDATE_ID);
+                setTitle(TEST_TITLE);
+                setContents(TEST_CONTENTS);
+                setExpiredDate(TEST_EXPIRED_DATE);
+                setCompleted(TEST_COMPLETED);
+                setCreateDatetime(TEST_CREATE_DATETIME);
+                setUpdateDatetime(TEST_UPDATE_DATETIME);
+            }
+        };
+
+        _mapper.save(updateData);
+        _todos.add(updateData);
+
         for (int i = 0; i < 20; i++) {
             val todo = new TodoItem(){
                 {
                     setTitle("ダミータイトル");
                     setContents("ダミー");
-                    setExpiredDate(TEST_DATE);
+                    setExpiredDate(TEST_EXPIRED_DATE);
                     setCompleted(false);
                     setCreateDatetime(datetime);
                     setUpdateDatetime(datetime);
@@ -168,21 +186,71 @@ public class TodoRepositoryTest {
         assertNotNull(todo);
         assertEquals(TEST_TITLE, todo.getTitle());
         assertEquals(TEST_CONTENTS, todo.getContents());
-        assertEquals(TEST_DATE, todo.getExpiredDate());
+        assertEquals(TEST_EXPIRED_DATE, todo.getExpiredDate());
         assertEquals(TEST_COMPLETED,todo.isCompleted());
+        assertEquals(TEST_CREATE_DATETIME, todo.getCreateDatetime());
+        assertEquals(TEST_UPDATE_DATETIME,todo.getUpdateDatetime());
     }
 
     @Test
-    public void testSetTodoItem() {
-        val todoItem = new TodoItem();
-
-        todoItem.setId("c179f5aa-57a0-4cda-b3bc-75e76ea39264");
-        todoItem.setTitle("title3355");
-        todoItem.setContents("Contents355");
+    public void testCreateTodoItem() {
+        val todoItem = new TodoItem(){
+            {
+                setTitle(TEST_TITLE);
+                setContents(TEST_CONTENTS);
+                setExpiredDate(TEST_EXPIRED_DATE);
+                setCompleted(TEST_COMPLETED);
+            }
+        };
 
         val result = _todoRepository.setTodoItem(todoItem);
 
         assertTrue(result);
+
+        val id = todoItem.getId();
+
+        val todo = _mapper.load(TodoItem.class, id);
+
+        assertEquals(TEST_TITLE, todo.getTitle());
+        assertEquals(TEST_CONTENTS, todo.getContents());
+        assertEquals(TEST_EXPIRED_DATE, todo.getExpiredDate());
+        assertEquals(TEST_COMPLETED, todo.isCompleted());
+
+        assertNotNull(todo.getId());
+        assertNotNull(todo.getCreateDatetime());
+        assertNotNull(todo.getUpdateDatetime());
+    }
+
+    @Test
+    public void testUpdateTodoItem(){
+        val todoItem = new TodoItem(){
+            {
+                setId(TEST_UPDATE_ID);
+                setTitle(TEST_TITLE);
+                setContents(TEST_CONTENTS);
+                setExpiredDate(TEST_EXPIRED_DATE);
+                setCompleted(TEST_COMPLETED);
+                setCreateDatetime(TEST_CREATE_DATETIME);
+                setUpdateDatetime(TEST_UPDATE_DATETIME);
+            }
+        };
+
+        val result = _todoRepository.setTodoItem(todoItem);
+
+        assertTrue(result);
+
+        val id = todoItem.getId();
+
+        val todo = _mapper.load(TodoItem.class, id);
+
+        assertEquals(TEST_UPDATE_ID, todo.getId());
+        assertEquals(TEST_TITLE, todo.getTitle());
+        assertEquals(TEST_CONTENTS, todo.getContents());
+        assertEquals(TEST_EXPIRED_DATE, todo.getExpiredDate());
+        assertEquals(TEST_COMPLETED, todo.isCompleted());
+        assertEquals(TEST_CREATE_DATETIME, todo.getCreateDatetime());
+
+        assertTrue(TEST_UPDATE_DATETIME.isBefore(todo.getUpdateDatetime()) );
     }
 
     @After
