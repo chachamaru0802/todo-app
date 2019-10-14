@@ -68,4 +68,15 @@ public class TodoItem extends ModelBase {
      */
      private boolean isCompleted;
 
+
+    @Override
+    public long getCreateTime() {
+        return super.getCreateTime();
+    }
+
+    @Override
+    public long getUpdateTime() {
+        return super.getUpdateTime();
+    }
+
 }
