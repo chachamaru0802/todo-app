@@ -37,7 +37,7 @@ public class TodoItem extends ModelBase {
      * 内容
      */
     @DynamoDBAttribute(attributeName = "Contents")
-    private String Contents;
+    private String contents;
 
 
     /**
