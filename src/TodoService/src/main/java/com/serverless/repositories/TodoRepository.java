@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.util.StringUtils;
 import com.serverless.models.TodoItem;
 
 import lombok.val;
@@ -56,7 +57,8 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
      */
     public boolean setTodoItem(TodoItem todoItem) {
         val datetime = LocalDateTime.now();
-        val isEmptyId = todoItem.getId().isEmpty();
+
+        val isEmptyId =  StringUtils.isNullOrEmpty(todoItem.getId());
 
         if(isEmptyId){
             todoItem.setCreateDatetime(datetime);
