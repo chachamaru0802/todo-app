@@ -4,26 +4,22 @@ import java.time.LocalDateTime;
 
 import com.serverless.utils.DateUtils;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 基底モデルクラス
  */
+@Data
 public class ModelBase {
 
     /**
      * 作成時間
      */
-    @Getter
-    @Setter
     private long createTime;
 
     /**
      * 更新時間
      */
-    @Getter
-    @Setter
     private long updateTime;
 
     /**
