@@ -1,6 +1,7 @@
 package com.serverless.models;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
@@ -30,7 +31,7 @@ public abstract class ModelBase {
      * 作成日時 取得
      */
     @DynamoDBIgnore
-    public LocalDateTime getCreateDatetime() {
+    public Date getCreateDatetime() {
         return DateUtils.toLocalDatetime(createTime);
     }
 
@@ -49,7 +50,7 @@ public abstract class ModelBase {
      * @return
      */
     @DynamoDBIgnore
-    public LocalDateTime getUpdateDatetime() {
+    public Date getUpdateDatetime() {
         return DateUtils.toLocalDatetime(updateTime);
     }
 

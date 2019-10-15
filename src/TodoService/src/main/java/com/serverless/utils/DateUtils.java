@@ -30,12 +30,8 @@ public final class DateUtils {
         return  Date.from(instant);
     }
 
-    public static LocalDateTime toLocalDatetime(long time){
-        val date = toDate(time);
-
-        val result = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-        return result;
+    public static Date toLocalDatetime(long time){
+        return toDate(time);
     }
 
     public static long toTimeInMillis(Date value){
