@@ -1,6 +1,6 @@
 package com.serverless.repositories;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,7 +56,7 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
      * @return
      */
     public boolean setTodoItem(TodoItem todoItem) {
-        val datetime = LocalDateTime.now();
+        val datetime = new Date();
 
         val isEmptyId =  StringUtils.isNullOrEmpty(todoItem.getId());
 

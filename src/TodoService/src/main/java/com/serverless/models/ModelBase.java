@@ -40,7 +40,7 @@ public abstract class ModelBase {
      * 
      * @param value
      */
-    public void setCreateDatetime(LocalDateTime value) {
+    public void setCreateDatetime(Date value) {
         createTime = DateUtils.toTimeInMillis(value);
     }
 
@@ -57,7 +57,7 @@ public abstract class ModelBase {
     /**
      * 更新日時 設定
      */
-    public void setUpdateDatetime(LocalDateTime value) {
+    public void setUpdateDatetime(Date value) {
         updateTime = DateUtils.toTimeInMillis(value);
     }
 }

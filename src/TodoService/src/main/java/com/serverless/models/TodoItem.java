@@ -1,6 +1,5 @@
 package com.serverless.models;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
