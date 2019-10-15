@@ -19,14 +19,14 @@ public abstract class ModelBase {
      * 作成時間
      */
     @JsonIgnore
-    @DynamoDBAttribute(attributeName = "CreateTime")
+    @DynamoDBAttribute
     private long createTime;
 
     /**
      * 更新時間
      */
     @JsonIgnore
-    @DynamoDBAttribute(attributeName = "UpdateTime")
+    @DynamoDBAttribute
     private long updateTime;
 
     /**
