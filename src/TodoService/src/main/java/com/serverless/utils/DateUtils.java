@@ -23,6 +23,11 @@ public final class DateUtils {
         return calendar.getTime();
     }
 
+    public  static Date toDate(LocalDate date){
+       val time = toTimeInMillis(date);
+       return toDate(time);
+    }
+
     public static Date toDate(LocalDateTime datetime){
         val zone = ZoneId.systemDefault();
         val zonedDateTime = ZonedDateTime.of(datetime, zone);
