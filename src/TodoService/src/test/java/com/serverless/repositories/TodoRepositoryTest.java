@@ -2,6 +2,7 @@ package com.serverless.repositories;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
@@ -35,6 +36,8 @@ public class TodoRepositoryTest {
     private final static String TEST_ID = "c179f5aa-57a0-4cda-b3bc-75e76ea39264";
 
     private final static String TEST_UPDATE_ID = "c179f5aa-57a0-4cda-b3bc-111111111111";
+
+    private final static String TEST_DELETE_ID = "c179f5aa-57a0-4cda-b3bc-222222222222";
 
     private final static String TEST_TITLE = "テストタイトル";
 
@@ -124,6 +127,7 @@ public class TodoRepositoryTest {
         _mapper.save(testData);
         _todos.add(testData);
 
+        // 更新用 テストデータ作成
         val updateData = new TodoItem() {
             {
                 setId(TEST_UPDATE_ID);
@@ -137,6 +141,22 @@ public class TodoRepositoryTest {
         };
 
         _mapper.save(updateData);
+        _todos.add(updateData);
+
+        // 削除用 テストデータ 作成
+        val deleteData = new TodoItem() {
+            {
+                setId(TEST_DELETE_ID);
+                setTitle(TEST_TITLE);
+                setContents(TEST_CONTENTS);
+                setExpiredDate(TEST_EXPIRED_DATE);
+                setCompleted(TEST_COMPLETED);
+                setCreateDatetime(TEST_CREATE_DATETIME);
+                setUpdateDatetime(TEST_UPDATE_DATETIME);
+            }
+        };
+
+        _mapper.save(deleteData);
         _todos.add(updateData);
 
         for (int i = 0; i < 20; i++) {
@@ -183,6 +203,9 @@ public class TodoRepositoryTest {
 
     }
 
+    /**
+     * データ１件取得テスト
+     */
     @Test
     public void testGetTodoItem() {
         val todo = _todoRepository.getTodoItem(TEST_ID);
@@ -196,6 +219,9 @@ public class TodoRepositoryTest {
         assertEquals(TEST_UPDATE_DATETIME, todo.getUpdateDatetime());
     }
 
+    /**
+     * 新規登録テスト
+     */
     @Test
     public void testCreateTodoItem() {
         val todoItem = new TodoItem() {
@@ -225,6 +251,9 @@ public class TodoRepositoryTest {
         assertNotNull(todo.getUpdateDatetime());
     }
 
+    /**
+     * 更新テスト
+     */
     @Test
     public void testUpdateTodoItem() {
         val todoItem = new TodoItem() {
@@ -255,6 +284,20 @@ public class TodoRepositoryTest {
         assertEquals(TEST_CREATE_DATETIME, todo.getCreateDatetime());
 
         assertTrue(TEST_UPDATE_DATETIME.before(todo.getUpdateDatetime()));
+    }
+
+    /**
+     * 削除テスト
+     */
+    @Test
+    public void testDelete(){
+        val isDelete = _todoRepository.deleteTodoItem(TEST_DELETE_ID);
+
+        assertTrue(isDelete);
+
+        val todo = _todoRepository.getTodoItem(TEST_DELETE_ID);
+
+        assertNull(todo);
     }
 
     @After

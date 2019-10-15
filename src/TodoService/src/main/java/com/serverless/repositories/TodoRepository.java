@@ -72,13 +72,14 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     }
 
     /**
-     * Todo 削除
-     * 
-     * @param todoItem
-     * @return
-     */
-    public boolean deleteTodoItem(TodoItem todoItem) {
-        _mapper.delete(todoItem);
+    * Todoを１件削除します。
+    *
+    * @param id
+    * @return
+    */
+    public boolean deleteTodoItem(String id) {
+        val todo = getTodoItem(id);
+        _mapper.delete(todo);
 
         return true;
     }
