@@ -1,10 +1,10 @@
 package com.serverless.models;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.serverless.utils.DateUtils;
 
 import lombok.Data;
@@ -18,12 +18,14 @@ public abstract class ModelBase {
     /**
      * 作成時間
      */
+    @JsonIgnore
     @DynamoDBAttribute(attributeName = "CreateTime")
     private long createTime;
 
     /**
      * 更新時間
      */
+    @JsonIgnore
     @DynamoDBAttribute(attributeName = "UpdateTime")
     private long updateTime;
 
