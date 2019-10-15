@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -16,6 +17,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.serverless.models.TodoItem;
+import com.serverless.utils.DateUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,13 +40,13 @@ public class TodoRepositoryTest {
 
     private final static String TEST_CONTENTS = "テスト内容";
 
-    private final static LocalDate TEST_EXPIRED_DATE = LocalDate.of(2019, 9, 30);
+    private final static Date TEST_EXPIRED_DATE = DateUtils.toDate(LocalDate.of(2019, 9, 30));
 
     private final static boolean TEST_COMPLETED = false;
 
-    private final static LocalDateTime TEST_CREATE_DATETIME = LocalDateTime.of(2019, 9, 28, 10, 20, 30);
+    private final static Date TEST_CREATE_DATETIME = DateUtils.toDate(LocalDateTime.of(2019, 9, 28, 10, 20, 30));
 
-    private final static LocalDateTime TEST_UPDATE_DATETIME = LocalDateTime.of(2019, 9, 29, 13, 40, 50);
+    private final static Date TEST_UPDATE_DATETIME = DateUtils.toDate(LocalDateTime.of(2019, 9, 29, 13, 40, 50));
 
     /**
      * DynamoDB Clinet
@@ -70,8 +72,7 @@ public class TodoRepositoryTest {
     public void before() {
         // Local DynamoDB 初期化
         val endpoint = new AwsClientBuilder.EndpointConfiguration(DYNAMODB_ENDPOINT, "local");
-        _client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(endpoint).build();
+        _client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(endpoint).build();
         _mapper = new DynamoDBMapper(_client);
 
         // Local DynamoDB 初期化
@@ -79,20 +80,19 @@ public class TodoRepositoryTest {
 
         // テストデータ 作成
         createTestData();
-        
+
         _todoRepository = new TodoRepository(_client);
     }
 
     /**
      * Local DynamoDB 初期化
      */
-    private void initLocalDynamoDB(){
+    private void initLocalDynamoDB() {
         val listTableResult = _client.listTables();
         val tableNames = listTableResult.getTableNames();
-        val hasTodoTable = tableNames.stream()
-                                .anyMatch(x-> x.equals("TodoItem"));
+        val hasTodoTable = tableNames.stream().anyMatch(x -> x.equals("TodoItem"));
 
-        if(!hasTodoTable){
+        if (!hasTodoTable) {
             val request = _mapper.generateCreateTableRequest(TodoItem.class);
             request.setProvisionedThroughput(new ProvisionedThroughput(5L, 5L));
             _client.createTable(request);
@@ -102,13 +102,14 @@ public class TodoRepositoryTest {
     /**
      * テストデータ 作成
      */
-    private void createTestData(){
-        val datetime = LocalDateTime.now();
-        
+    private void createTestData() {
+        val localDatetime = LocalDateTime.now();
+        val datetime = DateUtils.toDate(localDatetime);
+
         _todos = new ArrayList<TodoItem>();
 
         // データ取得用 テストデータ作成
-        val testData = new TodoItem(){
+        val testData = new TodoItem() {
             {
                 setId(TEST_ID);
                 setTitle(TEST_TITLE);
@@ -123,7 +124,7 @@ public class TodoRepositoryTest {
         _mapper.save(testData);
         _todos.add(testData);
 
-        val updateData = new TodoItem(){
+        val updateData = new TodoItem() {
             {
                 setId(TEST_UPDATE_ID);
                 setTitle(TEST_TITLE);
@@ -139,7 +140,7 @@ public class TodoRepositoryTest {
         _todos.add(updateData);
 
         for (int i = 0; i < 20; i++) {
-            val todo = new TodoItem(){
+            val todo = new TodoItem() {
                 {
                     setTitle("ダミータイトル");
                     setContents("ダミー");
@@ -159,15 +160,18 @@ public class TodoRepositoryTest {
      * 全件取得 テスト
      */
     @Test
-    public void testGetAllData(){
+    public void testGetAllData() {
         val todos = _todoRepository.searchTodoItem(null);
 
         assertNotNull(todos);
         assertEquals(_todos.size(), todos.size());
     }
 
+    /**
+     * 検索テスト
+     */
     @Test
-    public void testSearchTodoItem(){
+    public void testSearchTodoItem() {
         val conditions = new TodoItem();
         conditions.setTitle("スト");
 
@@ -176,9 +180,9 @@ public class TodoRepositoryTest {
         val todo = todos.stream().findFirst();
 
         assertNotNull(todo);
-        
+
     }
-    
+
     @Test
     public void testGetTodoItem() {
         val todo = _todoRepository.getTodoItem(TEST_ID);
@@ -187,14 +191,14 @@ public class TodoRepositoryTest {
         assertEquals(TEST_TITLE, todo.getTitle());
         assertEquals(TEST_CONTENTS, todo.getContents());
         assertEquals(TEST_EXPIRED_DATE, todo.getExpiredDate());
-        assertEquals(TEST_COMPLETED,todo.isCompleted());
+        assertEquals(TEST_COMPLETED, todo.isCompleted());
         assertEquals(TEST_CREATE_DATETIME, todo.getCreateDatetime());
-        assertEquals(TEST_UPDATE_DATETIME,todo.getUpdateDatetime());
+        assertEquals(TEST_UPDATE_DATETIME, todo.getUpdateDatetime());
     }
 
     @Test
     public void testCreateTodoItem() {
-        val todoItem = new TodoItem(){
+        val todoItem = new TodoItem() {
             {
                 setTitle(TEST_TITLE);
                 setContents(TEST_CONTENTS);
@@ -222,8 +226,8 @@ public class TodoRepositoryTest {
     }
 
     @Test
-    public void testUpdateTodoItem(){
-        val todoItem = new TodoItem(){
+    public void testUpdateTodoItem() {
+        val todoItem = new TodoItem() {
             {
                 setId(TEST_UPDATE_ID);
                 setTitle(TEST_TITLE);
@@ -250,11 +254,11 @@ public class TodoRepositoryTest {
         assertEquals(TEST_COMPLETED, todo.isCompleted());
         assertEquals(TEST_CREATE_DATETIME, todo.getCreateDatetime());
 
-        assertTrue(TEST_UPDATE_DATETIME.isBefore(todo.getUpdateDatetime()) );
+        assertTrue(TEST_UPDATE_DATETIME.before(todo.getUpdateDatetime()));
     }
 
     @After
-    public void after(){
+    public void after() {
         val scan = new DynamoDBScanExpression();
         val todos = _mapper.scan(TodoItem.class, scan);
 
