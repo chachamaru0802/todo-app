@@ -22,5 +22,15 @@ public class TodoService implements ITodoService {
         return _todoRepository.getTodoItem(id);
     }
 
+    @Override
+    public boolean setTodoItem(TodoItem todoItem) {
+        return _todoRepository.setTodoItem(todoItem);
+    }
+
+    @Override
+    public boolean deleteTodoItem(String id) {
+        return _todoRepository.deleteTodoItem(id);
+    }
+
     
 }
