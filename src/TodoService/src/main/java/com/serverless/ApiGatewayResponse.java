@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiGatewayResponse {
 
+	private final static String SERVER_ERROR = "internal server error";
+
 	private final int statusCode;
 	private final String body;
 	private final Map<String, String> headers;
@@ -135,6 +137,17 @@ public class ApiGatewayResponse {
 		return builder()
 			.setStatusCode(200)
 			.setObjectBody(body)
+			.build();
+	}
+
+	public static ApiGatewayResponse responseSuccess(){
+		return builder().setStatusCode(200).build();
+	}
+
+	public static ApiGatewayResponse responseServerError(){
+		return builder()
+			.setStatusCode(500)
+			.setObjectBody(SERVER_ERROR)
 			.build();
 	}
 }
