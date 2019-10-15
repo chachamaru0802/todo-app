@@ -220,6 +220,16 @@ public class TodoRepositoryTest {
     }
 
     /**
+     * 指定データがない場合のテスト
+     */
+    @Test
+    public void testGetTodoItemNotFound(){
+        val todo = _todoRepository.getTodoItem("dummy");
+
+        assertNull(todo);
+    }
+
+    /**
      * 新規登録テスト
      */
     @Test
