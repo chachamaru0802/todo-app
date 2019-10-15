@@ -2,6 +2,7 @@ package com.serverless.repositories;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -29,14 +30,25 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     }
 
     /**
-     * Todo 検索
+     * Todo検索
      */
-    public List<TodoItem> searchTodoItem(TodoItem todoItem) {
-        val scan = new DynamoDBScanExpression();
-        
-        val todos = _mapper.scan(TodoItem.class, scan);
+    public List<TodoItem> searchTodoItem(String key) {
+        val scanExpression = new DynamoDBScanExpression();
 
-        return todos;
+        val list = _mapper.scan(TodoItem.class, scanExpression);
+
+        val isKeyEmpty = StringUtils.isNullOrEmpty(key);
+
+        val todos = list.stream().filter(x -> !x.isCompleted()).collect(Collectors.toList());
+
+        if (isKeyEmpty) {
+            return todos;
+        }
+
+        val result = todos.stream().filter(x -> x.getTitle().contains(key)).collect(Collectors.toList());
+
+        return result;
+
     }
 
     /**
@@ -58,9 +70,9 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     public boolean setTodoItem(TodoItem todoItem) {
         val datetime = new Date();
 
-        val isEmptyId =  StringUtils.isNullOrEmpty(todoItem.getId());
+        val isEmptyId = StringUtils.isNullOrEmpty(todoItem.getId());
 
-        if(isEmptyId){
+        if (isEmptyId) {
             todoItem.setCreateDatetime(datetime);
         }
 
@@ -72,11 +84,11 @@ public class TodoRepository extends RepositoryBase implements ITodoRepository {
     }
 
     /**
-    * Todoを１件削除します。
-    *
-    * @param id
-    * @return
-    */
+     * Todoを１件削除します。
+     *
+     * @param id
+     * @return
+     */
     public boolean deleteTodoItem(String id) {
         val todo = getTodoItem(id);
         _mapper.delete(todo);

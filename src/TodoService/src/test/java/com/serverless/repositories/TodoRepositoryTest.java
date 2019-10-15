@@ -33,6 +33,8 @@ public class TodoRepositoryTest {
 
     private final static String DYNAMODB_ENDPOINT = "http://localhost:8000";
 
+    private final static int TEST_DATA_COUNT = 3;
+
     private final static String TEST_ID = "c179f5aa-57a0-4cda-b3bc-75e76ea39264";
 
     private final static String TEST_UPDATE_ID = "c179f5aa-57a0-4cda-b3bc-111111111111";
@@ -127,6 +129,20 @@ public class TodoRepositoryTest {
         _mapper.save(testData);
         _todos.add(testData);
 
+        // 完了済みテストデータ作成 
+        val testCompletedData = new TodoItem() {
+            {
+                setTitle(TEST_TITLE);
+                setContents(TEST_CONTENTS);
+                setExpiredDate(TEST_EXPIRED_DATE);
+                setCompleted(true);
+                setCreateDatetime(TEST_CREATE_DATETIME);
+                setUpdateDatetime(TEST_UPDATE_DATETIME);
+            }
+        };
+
+        _mapper.save(testCompletedData);
+
         // 更新用 テストデータ作成
         val updateData = new TodoItem() {
             {
@@ -192,15 +208,15 @@ public class TodoRepositoryTest {
      */
     @Test
     public void testSearchTodoItem() {
-        val conditions = new TodoItem();
-        conditions.setTitle("スト");
-
-        val todos = _todoRepository.searchTodoItem(conditions);
+        val todos = _todoRepository.searchTodoItem("スト");
 
         val todo = todos.stream().findFirst();
 
-        assertNotNull(todo);
+        assertNotNull(todos);
+        assertEquals(TEST_DATA_COUNT, todos.size());
 
+        assertNotNull(todo);
+        assertEquals(TEST_TITLE, todo.get().getTitle());
     }
 
     /**
@@ -223,7 +239,7 @@ public class TodoRepositoryTest {
      * 指定データがない場合のテスト
      */
     @Test
-    public void testGetTodoItemNotFound(){
+    public void testGetTodoItemNotFound() {
         val todo = _todoRepository.getTodoItem("dummy");
 
         assertNull(todo);
@@ -300,7 +316,7 @@ public class TodoRepositoryTest {
      * 削除テスト
      */
     @Test
-    public void testDelete(){
+    public void testDelete() {
         val isDelete = _todoRepository.deleteTodoItem(TEST_DELETE_ID);
 
         assertTrue(isDelete);
