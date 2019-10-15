@@ -30,6 +30,7 @@ public class TodoHandler {
 
     /**
      * Todoを１件取得します。
+     * 
      * @param request
      * @param context
      * @return
@@ -45,8 +46,50 @@ public class TodoHandler {
         return result;
     }
 
+    /**
+     * Todoリストのタイトルを検索します。
+     * 
+     * @param request
+     * @param context
+     * @return
+     */
+    public ApiGatewayResponse search(ApiGatewayRequest request, Context context) {
+        String key = Optional.ofNullable(request.getPathParameters()).map(x -> x.get("key")).orElse(null);
+
+        _logger.info("list start");
+
+        val body = _appComponent.todoService().searchTodoItem(key);
+
+        _logger.info("body: " + body);
+
+        val result = ApiGatewayResponse.responseBuild(body);
+
+        return result;
+    }
+
+    /**
+     * Todoリストを取得します。
+     * 
+     * @param request
+     * @param context
+     * @return
+     */
+    public ApiGatewayResponse list(Map<String, Object> input, Context context) {
+
+        _logger.info("list start");
+
+        val body = _appComponent.todoService().searchTodoItem(null);
+
+        _logger.info("body: " + body);
+
+        val result = ApiGatewayResponse.responseBuild(body);
+
+        return result;
+    }
+
     /***
      * Todoを１件新規に登録します。
+     * 
      * @param request
      * @param context
      * @return
@@ -71,6 +114,7 @@ public class TodoHandler {
 
     /**
      * 既存のTodoを更新します。
+     * 
      * @param request
      * @param context
      * @return
@@ -85,7 +129,7 @@ public class TodoHandler {
             ApiGatewayResponse.responseBuild(body);
 
             return ApiGatewayResponse.responseSuccess();
-            
+
         } catch (Exception e) {
             _logger.error(e);
 
@@ -95,22 +139,21 @@ public class TodoHandler {
 
     /***
      * Todoを１件削除します。
+     * 
      * @param request
      * @param context
      * @return
      */
-    public ApiGatewayResponse delete(ApiGatewayRequest request, Context context){
+    public ApiGatewayResponse delete(ApiGatewayRequest request, Context context) {
         try {
-            String id = Optional.ofNullable(request.getPathParameters())
-                            .map(x -> x.get("id"))
-                            .orElse(null);
+            String id = Optional.ofNullable(request.getPathParameters()).map(x -> x.get("id")).orElse(null);
 
             _logger.info("pathParamerter: " + id);
 
             _appComponent.todoService().deleteTodoItem(id);
-            
+
             return ApiGatewayResponse.responseSuccess();
-            
+
         } catch (Exception e) {
             _logger.error(e);
 

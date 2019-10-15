@@ -29,6 +29,14 @@ functions:
         path: api/todos/{id}
         method: get
         cros: true
+  search:
+    handler: com.serverless.TodoHandler::search
+    events:
+     - http:
+        path: api/todos/search/{key}
+        method: get
+        cros: true
+
   list:
     handler: com.serverless.TodoHandler::list
     events:

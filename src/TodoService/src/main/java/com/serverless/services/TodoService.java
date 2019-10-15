@@ -1,5 +1,7 @@
 package com.serverless.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.serverless.models.TodoItem;
@@ -30,6 +32,11 @@ public class TodoService implements ITodoService {
     @Override
     public boolean deleteTodoItem(String id) {
         return _todoRepository.deleteTodoItem(id);
+    }
+
+    @Override
+    public List<TodoItem> searchTodoItem(String key) {
+        return _todoRepository.searchTodoItem(key);
     }
 
     
